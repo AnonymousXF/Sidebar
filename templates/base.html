@@ -1,0 +1,29 @@
+{% block head %}
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<title>Practicing</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/font-awesome.min.css') }}">
+<!--END CSS-->
+{% endblock %}
+
+
+<div class="row">
+    <div class="col-md-2">
+        {% include 'sidebar.html' %}
+    </div>
+    <div class="col-md-10">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+
+
+
+<!--JS-->
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-3.3.1.min.js') }}"></script>
+{% endblock %}
