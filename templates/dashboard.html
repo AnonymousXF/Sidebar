@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {{ super() }}
+    <div class="container-fluid">
+        <div id="alert_area" style="text-align: center"></div>
+        <div class="row">
+            <div style="margin-top: 20px;margin-left: 20px">
+                <button type="button" class="btn btn-outline-success" data-toggle="modal" data-target="#appendHost">
+                    <span class="fa fa-plus-square"></span>
+                    添加主机
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal-->
+    <div id="appendHost" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <span class="fa fa-desktop fa-lg">
+                        添加主机信息
+                    </span>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="SingleHostPost">
+                        <div class="form-group">
+                            <label for="hostname" class="col-form-label">主机名：</label>
+                            <input type="text" class="form-control" id="hostname" name="hostname">
+                        </div>
+                        <div class="form-group">
+                            <label for="hostip" class="col-form-label">主机ip：</label>
+                            <input type="text" class="form-control" id="hostip" name="hostip">
+                        </div>
+                        <div class="form-group">
+                            <label for="hostuser" class="col-form-label">主机用户：</label>
+                            <input type="text" class="form-control" id="hostuser" name="hostuser">
+                        </div>
+                        <div class="form-group">
+                            <label for="hostpwd" class="col-form-label">主机密码：</label>
+                            <input type="password" class="form-control" id="hostpwd" name="hostpwd">
+                        </div>
+                        <div class="form-group">
+                            <label for="hostpwd" class="col-form-label">确认密码：</label>
+                            <input type="password" class="form-control" id="hostpwd_confirm" name="hostpwd_confirm">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="post_host()">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    {{ super() }}
+    <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+    <script>
+        function post_host() {
+            data = {hostname:$("#hostname").val(),hostip:$("#hostip").val(),hostuser:$("#hostuser").val(),hostpwd:$("#hostpwd").val(),hostpwd_confirm:$("#hostpwd_confirm").val()};
+            //console.log(data);
+            $.ajax({
+                type: "POST",
+                url: "{{ url_for('dashboard.appendSingleHost') }}",
+                contentType: 'application/json; charset=UTF-8',
+                data: JSON.stringify(data),
+                dataType: 'html',
+                success:function (data) {
+                    $(".close").click();
+                    $("#alert_area").html(data);
+                },
+                error: function () {
+                    alert("发生异常！");
+                }
+            });
+        }
+    </script>
+{% endblock %}
