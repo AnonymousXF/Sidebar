@@ -1,5 +1,83 @@
-<nav class="col-md-2 d-none d-md-block bg-dark" style="top: 0;bottom: 0;position: fixed">
-    <div class>
-
+<nav class="col-md-2 bg-dark" style="top: 0;bottom: 0;position: fixed">
+    <div style="overflow-y: auto">
+        <div style="text-align: center;">
+            <span class="navbar-brand" style="color: #f7f7f7;font-size: 200%;">Hello World</span>
+            <hr color=#f7f7f7>
+        </div>
+        <div class="sidebar-scroll">
+            <ul class="nav nav-pills">
+                <li class="nav-item" style="width: 100%">
+                    <a href="{{ url_for('dashboard.dashboard_index') }}" class="nav-link" data-toggle="cosllapse" style="color: #f7f7f7">
+                        <i class="fa fa-dashboard fa-lg fa-fw"></i>&nbsp;&nbsp;Dashboard
+                    </a>
+                </li>
+                <li class="nav-item" style="width: 100%">
+                    <a href="#" class="nav-link" data-toggle="cosllapse" style="color: #f7f7f7">
+                        <i class="fa fa-cloud fa-lg fa-fw"></i>&nbsp;&nbsp;Cloud
+                    </a>
+                </li>
+                <li class="nav-item" style="width: 100%">
+                    <a href="" class="nav-link hasDrop" data-toggle="collapse" style="color: #f7f7f7">
+                        <i class="fa fa-file fa-lg fa-fw"></i>&nbsp;&nbsp;File
+                        <span class="fa fa-angle-down" style="float: right"></span>
+                    </a>
+                    <ul class="dropdown collapse">
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">File 1</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">File 2</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">File 3</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" style="width: 100%">
+                    <a href="" class="nav-link hasDrop" data-toggle="collapse" style="color: #f7f7f7">
+                        <i class="fa fa-youtube-play fa-lg fa-fw"></i>&nbsp;&nbsp;Video
+                        <span class="fa fa-angle-down" style="float: right"></span>
+                    </a>
+                    <ul class="dropdown collapse">
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">Video 1</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">Video 2</a>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="nav-link" style="color: #adb5bd">Video 3</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
+<script>
+    //二级目录展开效果
+    $(".hasDrop").click(function () {
+        //一级目录右侧上下箭头变换效果
+        if($(this).children("span").hasClass("fa-angle-down")){
+            $(this).children("span").removeClass("fa-angle-down");
+            $(this).children("span").addClass("fa-angle-up");
+        }
+
+        else if($(this).children("span").hasClass("fa-angle-up")){
+            $(this).children("span").removeClass("fa-angle-up");
+            $(this).children("span").addClass("fa-angle-down");
+        }
+
+        //展开效果
+        $(this).siblings("ul").slideToggle(100);
+    });
+
+    //一级目录选中状态更新
+    $(".nav-item >.nav-link").click(function () {
+        $(this).parent().siblings("li").each(function () {
+           if($(this).children("a").hasClass("active"))
+               $(this).children("a").removeClass("active");
+        });
+        $(this).addClass("active");
+    });
+</script>
