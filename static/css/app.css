@@ -1,0 +1,17 @@
+.nav-link:hover{background: #263441;}
+.dropdown-item:hover{background: #263441;}
+.sidebar-scroll{
+    height: 600px;
+    overflow-y: auto;
+}
+.sidebar-scroll::-webkit-scrollbar{
+    width: 10px;
+}
+.sidebar-scroll::-webkit-scrollbar-track{
+    border-radius: 5px;
+    background-color: #eee;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb{
+    border-radius: 5px;
+    background: #3DB6A4;
+}
