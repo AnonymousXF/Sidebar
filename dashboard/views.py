@@ -1,5 +1,7 @@
 # -*- coding:utf-8 -*-
 from flask import render_template, request
+import os
+import csv
 from . import dashboard
 from . import info
 from .. import db
@@ -27,3 +29,38 @@ def appendSingleHost():
     except Exception as e:
         print(e)
         return info.aler_danger("主机信息已存在，添加失败！")
+
+@dashboard.route('/uploadapi', methods=['POST'])
+def upload():
+    try:
+        file = request.files['file']
+        filename = file.filename
+        if filename.endswith(".csv"):
+            base = os.getcwd()
+            path = os.path.join(base, 'temporary')
+            file.save(os.path.join(path, filename))
+            return '上传成功！'
+        else:
+            return "只支持csv格式的文件！"
+    except Exception as e:
+        return "上传失败！Error：" + e.__repr__()
+
+@dashboard.route('/appendHosts', methods=['POST'])
+def appendHosts():
+    raw_data = request.get_json()
+    filename = raw_data['filename'].split('\\')[-1]
+    base = os.path.abspath(".")
+    path = base + "/temporary/"
+    try:
+        csv_file = csv.reader(open(path + filename, 'r', encoding='utf-8'))
+        for line in csv_file:
+            host = Host(host_name=line[0],
+                        host_ip=line[1],
+                        user=line[2],
+                        pwd=line[3])
+            db.add(host)
+        db.commit()
+        return info.alert_success("添加成功！")
+    except Exception as e:
+        print(e)
+        return info.aler_danger("添加失败！请检查主机信息文件！")
