@@ -81,3 +81,29 @@ function post_hosts() {
         });
     }
 }
+
+$("#hostsinfo").bootstrapTable({
+    url: '/queryhosts',
+    dataType: "json",
+    striped: true,
+    search: true,
+    showRefresh: true,
+    height: 400,
+    columns: [{
+        field: 'host_name',
+        title: '主机名',
+        align: 'center'
+    },{
+        field: 'host_ip',
+        title: '主机IP',
+        align: 'center'
+    },{
+        filed: 'primarykey',
+        title: '操作',
+        align: 'center',
+        formatter: function (value, row, index) {
+            var a = '<a href="/hostinfo">详情</a>';
+            return a
+        }
+    }]
+});
