@@ -82,6 +82,11 @@ def QueryHosts():
         r = {}
         r['host_name'] = result.host_name
         r['host_ip'] = result.host_ip
+        r['primarykey'] = [result.host_ip, result.user]
         data.append(r)
     session.close()
     return json.dumps(data)
+
+@dashboard.route('/hostinfo')
+def HostInfo():
+    return render_template("host_template.html")
