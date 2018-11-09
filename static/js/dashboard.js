@@ -102,7 +102,7 @@ $("#hostsinfo").bootstrapTable({
         title: '操作',
         align: 'center',
         formatter: function (value, row, index) {
-            var a = '<a href="/hostinfo">详情</a>';
+            var a = '<a href="/hostinfo/' + row.host_ip + '">详情</a>';
             return a
         }
     }]
