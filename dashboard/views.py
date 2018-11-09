@@ -1,12 +1,13 @@
 # -*- coding:utf-8 -*-
-from flask import render_template, request, jsonify
+from flask import render_template, request
 import os
 import csv
 import json
+from datetime import datetime
 from . import dashboard
 from . import info
 from .. import DBSession
-from ..models import Host
+from ..models import Host, MemInfo
 
 @dashboard.route('/')
 def dashboard_index():
@@ -87,6 +88,6 @@ def QueryHosts():
     session.close()
     return json.dumps(data)
 
-@dashboard.route('/hostinfo')
-def HostInfo():
-    return render_template("host_template.html")
+@dashboard.route('/hostinfo/<path:hostip>')
+def HostInfo(hostip):
+    return render_template("host_template.html", hostip=hostip)
