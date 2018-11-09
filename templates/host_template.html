@@ -1,2 +1,120 @@
 {% extends 'base.html' %}
 
+{% block content %}
+{{ super() }}
+<div id="mem_chart" style="height: 400px;margin-left: 10px;margin-top: 20px;"></div>
+<div id="cpu_chart" style="height: 400px;margin-left: 10px;margin-top: 20px;"></div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/echarts.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/macarons.js') }}"></script>
+<script>
+    var memChart = echarts.init(document.getElementById('mem_chart'),'macarons');
+    var cpuChart = echarts.init(document.getElementById('cpu_chart'),'macarons');
+    var mem_option = {
+        title:{
+            text:'内存使用情况'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        legend:{
+            data:['内存使用百分比']
+        },
+        calculable : true,
+        xAxis:{
+            type: 'category',
+            boundaryGap : false,
+            data:[]
+        },
+        yAxis:{
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            }
+        },
+        series:[{
+            name:'百分比',
+            type:'line',
+            data:[]
+        }]
+    };
+    var cpu_option = {
+        title:{
+            text:'CPU使用情况'
+        },
+        tooltip : {
+            trigger: 'axis'
+        },
+        toolbox: {
+            show : true,
+            feature : {
+                mark : {show: true},
+                dataView : {show: true, readOnly: false},
+                magicType : {show: true, type: ['line', 'bar']},
+                restore : {show: true},
+                saveAsImage : {show: true}
+            }
+        },
+        legend:{
+            data:['CPU使用百分比']
+        },
+        calculable : true,
+        xAxis:{
+            type: 'category',
+            boundaryGap : false,
+            data:[]
+        },
+        yAxis:{
+            type: 'value',
+            axisLabel: {
+                formatter: '{value} %'
+            }
+        },
+        series:[{
+            name:'百分比',
+            type:'line',
+            data:[]
+        }]
+    };
+    function getMemData() {
+        $.get("/api/get_meminfo/{{ hostip }}", function (data, status) {
+            data = JSON.parse(data);
+            mem_option.xAxis.data = data['timestamp'];
+            mem_option.series[0].data = data['percent'];
+            memChart.setOption(mem_option);
+        })
+    }
+    function getCPUData() {
+        $.get("/api/get_cpuinfo/{{ hostip }}", function (data, status) {
+            data = JSON.parse(data);
+            cpu_option.xAxis.data = data['timestamp'];
+            cpu_option.series[0].data = data['percent'];
+            cpuChart.setOption(cpu_option);
+        })
+    }
+
+    getMemData();
+    getCPUData();
+    setInterval(function () {
+        getMemData();
+    }, 10*1000);
+
+    setInterval(function () {
+        getCPUData();
+    }, 10*1000);
+
+</script>
+{% endblock %}
